@@ -1,0 +1,33 @@
+package com.example.demo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class UserController {
+
+    private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+    @RestController
+    public class HomeController {
+
+    @GetMapping("/")
+    public String home() {
+        return "Welcome to the API!";
+    }
+}
+
+    @PostMapping("/register")
+    public String registerUser(@RequestBody UserRegistrationDto registrationDto) {
+        User user = new User();
+        user.setUsername(registrationDto.getUsername());
+        user.setPassword(registrationDto.getPassword());
+        userService.registerNewUser(user);
+        return "User registered successfully";
+    }
+}
