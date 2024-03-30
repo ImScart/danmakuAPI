@@ -1,14 +1,14 @@
 package com.example.demo;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "UserAccount")
+public class UserAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,17 +16,14 @@ public class User {
     private String password;
     private String email;
 
-    // Default constructor
-    public User() {}
+    public UserAccount() {}
 
-    // Constructor with parameters
-    public User(String username, String password, String email) {
+    public UserAccount(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }

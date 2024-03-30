@@ -1,33 +1,32 @@
 package com.example.demo;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 @RestController
-public class UserController {
+public class RegisterController {
 
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public RegisterController(UserService userService) {
         this.userService = userService;
     }
-    @RestController
-    public class HomeController {
-
-    @GetMapping("/")
-    public String home() {
-        return "Welcome to the API!";
-    }
-}
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody UserRegistrationDto registrationDto) {
-        User user = new User();
+    public ResponseEntity<String> registerUser(@Valid @RequestBody UserRegistrationDto registrationDto) {
+        UserAccount user = new UserAccount();
         user.setUsername(registrationDto.getUsername());
         user.setPassword(registrationDto.getPassword());
+        user.setEmail(registrationDto.getEmail());
+        
         userService.registerNewUser(user);
-        return "User registered successfully";
+        
+        return ResponseEntity.ok("User registered successfully");
     }
 }
