@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.DTO.UserBioDto;
 import com.example.demo.DTO.UserRegistrationDto;
 import com.example.demo.Exceptions.EmailExistsException;
+import com.example.demo.Exceptions.ExpiredOrInvalidTokenException;
 import com.example.demo.Exceptions.InvalidPasswordException;
 import com.example.demo.Exceptions.UsernameExistsException;
 import com.example.demo.Exceptions.UsernameNotFoundException;
@@ -79,7 +80,7 @@ public class UserService {
 
     public UserAccount getUserByVerificationToken(String token) {
         return userRepository.findByVerificationToken(token)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid or expired verification token"));
+                .orElseThrow(() -> new ExpiredOrInvalidTokenException("Invalid or expired verification token"));
     }
 
 }

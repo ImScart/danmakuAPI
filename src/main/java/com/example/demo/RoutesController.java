@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.DTO.UserBioDto;
 import com.example.demo.DTO.UserRegistrationDto;
 import com.example.demo.Exceptions.EmailExistsException;
+import com.example.demo.Exceptions.ExpiredOrInvalidTokenException;
 import com.example.demo.Exceptions.InvalidPasswordException;
 import com.example.demo.Exceptions.UsernameExistsException;
 import com.example.demo.Exceptions.UsernameNotFoundException;
@@ -84,6 +85,13 @@ public class RoutesController {
     @ExceptionHandler(InvalidPasswordException.class)
     public ResponseEntity<ApiResponse<String>> handleInvalidPasswordException(InvalidPasswordException e) {
         ApiResponse<String> response = new ApiResponse<>("2", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    // INVALID TOKEN
+    @ExceptionHandler(ExpiredOrInvalidTokenException.class)
+    public ResponseEntity<ApiResponse<String>> handleExpiredOrInvalidTokenException(ExpiredOrInvalidTokenException e) {
+        ApiResponse<String> response = new ApiResponse<>("1", e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }
