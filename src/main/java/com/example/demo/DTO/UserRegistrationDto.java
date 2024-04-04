@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.DTO;
 import jakarta.validation.constraints.NotBlank;
 
 public class UserRegistrationDto {
