@@ -16,8 +16,11 @@ public class UserAccount {
     private String password;
     private String email;
     private String bio;
+    private boolean emailIsVerified;
+    private String verificationToken;
 
-    public UserAccount() {}
+    public UserAccount() {
+    }
 
     public UserAccount(String username, String password, String email) {
         this.username = username;
@@ -57,13 +60,27 @@ public class UserAccount {
         this.email = email;
     }
 
-    public String getBio() 
-    {
+    public String getBio() {
         return bio;
     }
 
-    public void setBio(String bio) 
-    {
+    public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public boolean getEmailIsVerified() {
+        return emailIsVerified;
+    }
+
+    public void setEmailIsVerified(boolean b) {
+        this.emailIsVerified = b;
+    }
+
+    public String getVerificationToken() {
+        return verificationToken;
+    }
+
+    public void setVerificationToken(String verificationToken) {
+        this.verificationToken = verificationToken;
     }
 }

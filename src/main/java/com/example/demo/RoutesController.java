@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.DTO.UserBioDto;
@@ -29,7 +31,8 @@ public class RoutesController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<UserAccount>> registerUser(@Valid @RequestBody UserRegistrationDto registrationDto) {
+    public ResponseEntity<ApiResponse<UserAccount>> registerUser(
+            @Valid @RequestBody UserRegistrationDto registrationDto) {
         UserAccount user = userService.registerNewUser(registrationDto);
         ApiResponse<UserAccount> response = new ApiResponse<>("0", "Account created successfully");
         return ResponseEntity.ok(response);
@@ -40,6 +43,20 @@ public class RoutesController {
         userService.updateUserBio(request);
         ApiResponse<String> response = new ApiResponse<>("0", "Bio updated successfully");
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<String> verifyEmail(@RequestParam("token") String token) {
+        UserAccount user = userService.getUserByVerificationToken(token);
+
+        if (user == null) {
+            return ResponseEntity.badRequest().body("Invalid or expired verification token");
+        }
+
+        user.setEmailIsVerified(true);
+        userService.saveUser(user);
+
+        return ResponseEntity.ok("Email verified successfully");
     }
 
     // USERNAME IN USE

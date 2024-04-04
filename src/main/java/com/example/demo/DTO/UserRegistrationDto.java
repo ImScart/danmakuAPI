@@ -1,8 +1,9 @@
 package com.example.demo.DTO;
+
 import jakarta.validation.constraints.NotBlank;
 
 public class UserRegistrationDto {
-    
+
     @NotBlank(message = "Username is mandatory")
     private String username;
 
