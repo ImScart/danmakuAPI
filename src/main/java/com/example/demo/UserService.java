@@ -8,6 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.DTO.UserBioDto;
+import com.example.demo.DTO.UserLoginDto;
 import com.example.demo.DTO.UserRegistrationDto;
 import com.example.demo.Exceptions.EmailExistsException;
 import com.example.demo.Exceptions.ExpiredOrInvalidTokenException;
@@ -48,6 +49,16 @@ public class UserService {
         sendVerificationEmail(user.getEmail(), token);
 
         return savedUser;
+    }
+
+    public UserAccount loginUser(UserLoginDto dto) {
+        UserAccount user = userRepository.findByUsername(dto.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        if (!dto.getPassword().equals(user.getPassword())) {
+            throw new InvalidPasswordException("Invalid password");
+        }
+
+        return user;
     }
 
     public void updateUserBio(UserBioDto dto) {

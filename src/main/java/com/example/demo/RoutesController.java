@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.DTO.UserBioDto;
+import com.example.demo.DTO.UserLoginDto;
 import com.example.demo.DTO.UserRegistrationDto;
 import com.example.demo.Exceptions.EmailExistsException;
 import com.example.demo.Exceptions.ExpiredOrInvalidTokenException;
@@ -36,6 +37,13 @@ public class RoutesController {
             @Valid @RequestBody UserRegistrationDto registrationDto) {
         UserAccount user = userService.registerNewUser(registrationDto);
         ApiResponse<UserAccount> response = new ApiResponse<>("0", "Account created successfully");
+        return ResponseEntity.ok(response);
+    }
+    @GetMapping("/login")
+    public ResponseEntity<ApiResponse<UserAccount>> loginUser(
+            @Valid @RequestBody UserLoginDto loginDto) {
+        UserAccount user = userService.loginUser(loginDto);
+        ApiResponse<UserAccount> response = new ApiResponse<>("0", user);
         return ResponseEntity.ok(response);
     }
 

@@ -2,13 +2,11 @@ package com.example.demo.DTO;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class UserBioDto {
+public class UserLoginDto {
     @NotBlank(message = "Username is mandatory")
     private String username;
     @NotBlank(message = "Password is mandatory")
     private String password;
-    @NotBlank(message = "Bio is mandatory")
-    private String bio;
 
     public String getUsername() {
         return username;
@@ -24,13 +22,5 @@ public class UserBioDto {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
     }
 }
