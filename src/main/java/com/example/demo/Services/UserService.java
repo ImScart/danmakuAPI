@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.Services;
 
 import java.util.UUID;
 
@@ -7,11 +7,13 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.UserRepository;
 import com.example.demo.DTO.UserBioDto;
 import com.example.demo.DTO.UserLoginDto;
 import com.example.demo.DTO.UserRegistrationDto;
 import com.example.demo.Exceptions.EmailExistsException;
 import com.example.demo.Exceptions.ExpiredOrInvalidTokenException;
+import com.example.demo.Exceptions.InvalidIdException;
 import com.example.demo.Exceptions.InvalidPasswordException;
 import com.example.demo.Exceptions.UsernameExistsException;
 import com.example.demo.Exceptions.UsernameNotFoundException;
@@ -92,6 +94,10 @@ public class UserService {
     public UserAccount getUserByVerificationToken(String token) {
         return userRepository.findByVerificationToken(token)
                 .orElseThrow(() -> new ExpiredOrInvalidTokenException("Invalid or expired verification token"));
+    }
+    public UserAccount getUserByID(Integer id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new InvalidIdException("Invalid ID"));
     }
 
 }
