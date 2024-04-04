@@ -7,7 +7,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.UserRepository;
 import com.example.demo.DTO.UserBioDto;
 import com.example.demo.DTO.UserLoginDto;
 import com.example.demo.DTO.UserRegistrationDto;
@@ -17,6 +16,7 @@ import com.example.demo.Exceptions.InvalidIdException;
 import com.example.demo.Exceptions.InvalidPasswordException;
 import com.example.demo.Exceptions.UsernameExistsException;
 import com.example.demo.Exceptions.UsernameNotFoundException;
+import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Tables.UserAccount;
 
 @Service

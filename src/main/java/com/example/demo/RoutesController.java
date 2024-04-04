@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.DTO.ForumThreadCreateDto;
+import com.example.demo.DTO.ForumThreadDto;
 import com.example.demo.DTO.UserBioDto;
 import com.example.demo.DTO.UserLoginDto;
 import com.example.demo.DTO.UserRegistrationDto;
@@ -80,6 +83,11 @@ public class RoutesController {
     public ResponseEntity<ForumThread> createThread(@RequestBody ForumThreadCreateDto threadCreateDto) {
         ForumThread thread = threadService.createThread(threadCreateDto);
         return ResponseEntity.ok(thread);
+    }
+    @GetMapping("/thread/all")
+    public ResponseEntity<List<ForumThreadDto>> getAllThreads() {
+        List<ForumThreadDto> threads = threadService.getAllThreads();
+        return ResponseEntity.ok().body(threads);
     }
 
     // USERNAME IN USE
