@@ -2,7 +2,6 @@ package com.example.demo.Services;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final JavaMailSender mailSender;
 
-    @Autowired
     public UserService(UserRepository userRepository, JavaMailSender mailSender) {
         this.userRepository = userRepository;
         this.mailSender = mailSender;
@@ -95,6 +93,7 @@ public class UserService {
         return userRepository.findByVerificationToken(token)
                 .orElseThrow(() -> new ExpiredOrInvalidTokenException("Invalid or expired verification token"));
     }
+
     public UserAccount getUserByID(Integer id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new InvalidIdException("Invalid ID"));

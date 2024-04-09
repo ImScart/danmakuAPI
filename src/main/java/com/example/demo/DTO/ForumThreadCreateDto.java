@@ -1,14 +1,9 @@
 package com.example.demo.DTO;
 
-import jakarta.validation.constraints.NotBlank;
-
 public class ForumThreadCreateDto {
 
-    @NotBlank(message = "Owner ID is mandatory")
     private Integer ownerId;
-    @NotBlank(message = "Title is mandatory")
     private String title;
-    @NotBlank(message = "Value is mandatory")
     private String value;
 
     public Integer getOwnerId() {

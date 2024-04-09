@@ -2,7 +2,6 @@ package com.example.demo;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,11 +20,11 @@ import com.example.demo.Exceptions.EmailExistsException;
 import com.example.demo.Exceptions.ExpiredOrInvalidTokenException;
 import com.example.demo.Exceptions.InvalidIdException;
 import com.example.demo.Exceptions.InvalidPasswordException;
+import com.example.demo.Exceptions.ThreadValuesInvalidException;
 import com.example.demo.Exceptions.UsernameExistsException;
 import com.example.demo.Exceptions.UsernameNotFoundException;
 import com.example.demo.Services.ForumThreadService;
 import com.example.demo.Services.UserService;
-import com.example.demo.Tables.ForumThread;
 import com.example.demo.Tables.UserAccount;
 
 import jakarta.validation.Valid;
@@ -36,7 +35,6 @@ public class RoutesController {
     private final UserService userService;
     private final ForumThreadService threadService;
 
-    @Autowired
     public RoutesController(UserService userService, ForumThreadService threadService) {
         this.userService = userService;
         this.threadService = threadService;
@@ -45,7 +43,7 @@ public class RoutesController {
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<UserAccount>> registerUser(
             @Valid @RequestBody UserRegistrationDto registrationDto) {
-        UserAccount user = userService.registerNewUser(registrationDto);
+        userService.registerNewUser(registrationDto);
         ApiResponse<UserAccount> response = new ApiResponse<>("0", "Account created successfully");
         return ResponseEntity.ok(response);
     }
@@ -80,10 +78,12 @@ public class RoutesController {
     }
 
     @PostMapping("/thread/create")
-    public ResponseEntity<ForumThread> createThread(@RequestBody ForumThreadCreateDto threadCreateDto) {
-        ForumThread thread = threadService.createThread(threadCreateDto);
-        return ResponseEntity.ok(thread);
+    public ResponseEntity<ApiResponse<String>> createThread(@RequestBody ForumThreadCreateDto threadCreateDto) {
+        threadService.createThread(threadCreateDto);
+        ApiResponse<String> response = new ApiResponse<>("0", "Thread created successfully");
+        return ResponseEntity.ok(response);
     }
+
     @GetMapping("/thread/all")
     public ResponseEntity<List<ForumThreadDto>> getAllThreads() {
         List<ForumThreadDto> threads = threadService.getAllThreads();
@@ -129,6 +129,13 @@ public class RoutesController {
     @ExceptionHandler(InvalidIdException.class)
     public ResponseEntity<ApiResponse<String>> handleInvalidIdException(InvalidIdException e) {
         ApiResponse<String> response = new ApiResponse<>("1", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    // INVALID THREAD VALUES
+    @ExceptionHandler(ThreadValuesInvalidException.class)
+    public ResponseEntity<ApiResponse<String>> handleThreadValuesInvalidException(ThreadValuesInvalidException e) {
+        ApiResponse<String> response = new ApiResponse<>("2", e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }

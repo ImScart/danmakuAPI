@@ -18,11 +18,11 @@ public class ForumThread {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private String title;
-    
+
     private String value;
-    
+
     private LocalDateTime created;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
