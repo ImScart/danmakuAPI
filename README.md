@@ -99,15 +99,13 @@ All API requests should be made to `http://{baseurl}:8080`. Replace `{baseurl}` 
 
 ---
 
-### 5. Verify Email
+### 5. Verify Email (Backend Only)
 
-- **Endpoint:** `/verify`
+- **Endpoint:** `/verify?token=`
 - **Method:** `GET`
-- **Input:** Query parameter `token` for email verification.
-- **Usage:** Backend only.
-- **Returns:** Status message indicating the result of the email verification process.
-
----
+- **Return:** A message indicating the result of the email verification. Possible responses include:
+  - `Email verified successfully`
+  - `{"code": "1", "data": null, "message": "Invalid or expired verification token"}`
 
 ### 6. Create a New Thread
 
@@ -118,7 +116,16 @@ All API requests should be made to `http://{baseurl}:8080`. Replace `{baseurl}` 
 
 ---
 
-**Note:** Responses for each endpoint include a `code` field indicating the operation's success or specific error types, followed by a relevant message.
+### Error Codes and Messages
 
----
+For each endpoint, the API may return different codes and messages indicating the result of the requested operation. Here are the common codes and their meanings:
 
+- `{"code": "0", ...}`: Operation completed successfully.
+- `{"code": "1", ...}`: Indicates a user-related error (e.g., user not found, username already exists).
+- `{"code": "2", ...}`: Indicates a data or input-related error (e.g., invalid password, email already exists, invalid verification token).
+
+### Additional Notes
+
+- Replace `http://{baseurl}:8080` with the actual base URL of your API service.
+- Ensure all data sent to POST endpoints is in JSON format.
+- Use appropriate HTTP methods for each request as specified.
