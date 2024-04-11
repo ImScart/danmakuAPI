@@ -19,9 +19,12 @@ import com.example.demo.DTO.UserBioDto;
 import com.example.demo.DTO.UserLoginDto;
 import com.example.demo.DTO.UserRegistrationDto;
 import com.example.demo.Exceptions.EmailExistsException;
+import com.example.demo.Exceptions.EmailIsNotVerifiedException;
 import com.example.demo.Exceptions.ExpiredOrInvalidTokenException;
+import com.example.demo.Exceptions.InvalidEmailException;
 import com.example.demo.Exceptions.InvalidIdException;
 import com.example.demo.Exceptions.InvalidPasswordException;
+import com.example.demo.Exceptions.InvalidResetTokenException;
 import com.example.demo.Exceptions.ThreadValuesInvalidException;
 import com.example.demo.Exceptions.UsernameExistsException;
 import com.example.demo.Exceptions.UsernameNotFoundException;
@@ -150,10 +153,31 @@ public class RoutesController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
+    // INVALID EMAIL
+    @ExceptionHandler(InvalidEmailException.class)
+    public ResponseEntity<ApiResponse<String>> handleInvalidEmailException(InvalidEmailException e) {
+        ApiResponse<String> response = new ApiResponse<>("1", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
     // INVALID THREAD VALUES
     @ExceptionHandler(ThreadValuesInvalidException.class)
     public ResponseEntity<ApiResponse<String>> handleThreadValuesInvalidException(ThreadValuesInvalidException e) {
         ApiResponse<String> response = new ApiResponse<>("2", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    // EMAIL NOT VERIFIED
+    @ExceptionHandler(EmailIsNotVerifiedException.class)
+    public ResponseEntity<ApiResponse<String>> handleEmailIsNotVerifiedException(EmailIsNotVerifiedException e) {
+        ApiResponse<String> response = new ApiResponse<>("1", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    // INVALID RESET TOKEN
+    @ExceptionHandler(InvalidResetTokenException.class)
+    public ResponseEntity<ApiResponse<String>> handleInvalidResetTokenException(InvalidResetTokenException e) {
+        ApiResponse<String> response = new ApiResponse<>("1", e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }
