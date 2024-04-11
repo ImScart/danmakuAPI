@@ -6,13 +6,17 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.DTO.ResetPasswordDto;
 import com.example.demo.DTO.UserBioDto;
 import com.example.demo.DTO.UserLoginDto;
 import com.example.demo.DTO.UserRegistrationDto;
 import com.example.demo.Exceptions.EmailExistsException;
+import com.example.demo.Exceptions.EmailIsNotVerifiedException;
 import com.example.demo.Exceptions.ExpiredOrInvalidTokenException;
+import com.example.demo.Exceptions.InvalidEmailException;
 import com.example.demo.Exceptions.InvalidIdException;
 import com.example.demo.Exceptions.InvalidPasswordException;
+import com.example.demo.Exceptions.InvalidResetTokenException;
 import com.example.demo.Exceptions.UsernameExistsException;
 import com.example.demo.Exceptions.UsernameNotFoundException;
 import com.example.demo.Repositories.UserRepository;
@@ -42,13 +46,26 @@ public class UserService {
         user.setPassword(dto.getPassword());
         user.setEmail(dto.getEmail());
 
-        String token = UUID.randomUUID().toString();
-        user.setVerificationToken(token);
+        String verificationToken = UUID.randomUUID().toString();
+        user.setVerificationToken(verificationToken);
         UserAccount savedUser = userRepository.save(user);
 
-        sendVerificationEmail(user.getEmail(), token);
+        sendVerificationEmail(user.getEmail(), verificationToken);
 
         return savedUser;
+    }
+
+    public void setResetToken(String email)
+    {
+        UserAccount user = userRepository.findByEmail(email)
+        .orElseThrow(() -> new InvalidEmailException("Email not found"));
+        if(!user.getEmailIsVerified())
+        {
+            throw new EmailIsNotVerifiedException("Email is not verified.");
+        }
+        String resetToken = UUID.randomUUID().toString();
+        user.setResetToken(resetToken);
+        userRepository.save(user);
     }
 
     public UserAccount loginUser(UserLoginDto dto) {
@@ -78,7 +95,7 @@ public class UserService {
     }
 
     private void sendVerificationEmail(String email, String token) {
-        String verificationUrl = "http://127.0.0.1:8080/verify?token=" + token;
+        String verificationUrl = "http://127.0.0.1:8080/user/verify?token=" + token;
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("danmakuverification@outlook.com");
@@ -87,6 +104,24 @@ public class UserService {
         message.setText("To verify your email, please click the link below:\n" + verificationUrl);
 
         mailSender.send(message);
+    }
+    public void sendResetEmail(String email, String token) {
+        String verificationUrl = "http://144.217.83.146/resetPassword/verify?token=" + token;
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("danmakuverification@outlook.com");
+        message.setTo(email);
+        message.setSubject("Reset your password");
+        message.setText("To reset your password, please click the link below:\n" + verificationUrl);
+
+        mailSender.send(message);
+    }
+    public void updateUserPassword(ResetPasswordDto dto) {
+        UserAccount user = userRepository.findByResetToken(dto.getToken())
+                .orElseThrow(() -> new InvalidResetTokenException("Invalid reset token"));
+
+        user.setPassword(dto.getPassword());
+        userRepository.save(user);
     }
 
     public UserAccount getUserByVerificationToken(String token) {
@@ -99,4 +134,13 @@ public class UserService {
                 .orElseThrow(() -> new InvalidIdException("Invalid ID"));
     }
 
+    public UserAccount getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new InvalidEmailException("Invalid Email"));
+    }
+
+    public UserAccount getUserByResetToken(String resetToken) {
+        return userRepository.findByResetToken(resetToken)
+                .orElseThrow(() -> new InvalidResetTokenException("Invalid Reset Token"));
+    }
 }

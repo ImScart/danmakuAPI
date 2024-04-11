@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.DTO.ForumThreadCreateDto;
 import com.example.demo.DTO.ForumThreadDto;
+import com.example.demo.DTO.ResetPasswordDto;
+import com.example.demo.DTO.ResetPasswordEmailDto;
 import com.example.demo.DTO.UserBioDto;
 import com.example.demo.DTO.UserLoginDto;
 import com.example.demo.DTO.UserRegistrationDto;
@@ -63,7 +65,7 @@ public class RoutesController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/verify")
+    @GetMapping("/user/verify")
     public ResponseEntity<String> verifyEmail(@RequestParam("token") String token) {
         UserAccount user = userService.getUserByVerificationToken(token);
 
@@ -88,6 +90,22 @@ public class RoutesController {
     public ResponseEntity<List<ForumThreadDto>> getAllThreads() {
         List<ForumThreadDto> threads = threadService.getAllThreads();
         return ResponseEntity.ok().body(threads);
+    }
+
+    @PostMapping("/user/sendPassword")
+    public ResponseEntity<ApiResponse<UserAccount>> resetPassword(@RequestBody ResetPasswordEmailDto resetPasswordEmailDto) {
+        UserAccount user = userService.getUserByEmail(resetPasswordEmailDto.getEmail());
+        userService.setResetToken(resetPasswordEmailDto.getEmail());
+        userService.sendResetEmail(resetPasswordEmailDto.getEmail(),user.getResetToken());
+        ApiResponse<UserAccount> response = new ApiResponse<>("0", "Password reset email has been sent");
+        return ResponseEntity.ok(response);
+    }
+    @PostMapping("/user/resetPassword")
+    public ResponseEntity<ApiResponse<UserAccount>> resetPasswordEmail(@RequestBody ResetPasswordDto resetPasswordDto)
+    {
+        userService.updateUserPassword(resetPasswordDto);
+        ApiResponse<UserAccount> response = new ApiResponse<>("0", "Password has been reset");
+        return ResponseEntity.ok(response);
     }
 
     // USERNAME IN USE

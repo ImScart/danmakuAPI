@@ -18,6 +18,7 @@ public class UserAccount {
     private String bio;
     private boolean emailIsVerified;
     private String verificationToken;
+    private String resetToken;
     private String profilePicture;
 
     public UserAccount() {
@@ -83,6 +84,14 @@ public class UserAccount {
 
     public void setVerificationToken(String verificationToken) {
         this.verificationToken = verificationToken;
+    }
+
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
     }
 
     public String getProfilePicture() {
