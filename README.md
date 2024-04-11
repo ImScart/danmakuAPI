@@ -1,131 +1,84 @@
 
-# API Methods
+# API Documentation
 
-This document outlines the available API endpoints, their inputs, and expected responses.
+## User Management
 
-## Base URL
-
-All API requests should be made to `http://{baseurl}:8080`. Replace `{baseurl}` with the actual base URL of the API.
-
----
-
-### 1. List All Threads
-
-- **Endpoint:** `/thread/all`
-- **Method:** `GET`
-- **Input:** None
-- **Returns:** An array of thread objects. Each object contains the following fields:
-  - `id`: Thread ID
-  - `title`: Thread title
-  - `value`: Thread content
-  - `created`: Creation timestamp
-  - `ownerId`: ID of the thread owner
-  - `username`: Owner's username
-  - `profilePicture`: Filename of the owner's profile picture
-
-**Example Response:**
-
-```json
-[
-  {
-    "id": 1,
-    "title": "premier thread",
-    "value": "ca marche :)",
-    "created": "2024-04-04T02:35:06",
-    "ownerId": 16,
-    "username": "scartos",
-    "profilePicture": "default.png"
-  }
-]
-```
-
----
-
-### 2. Register a New Account
-
+### Register a New User
 - **Endpoint:** `/register`
 - **Method:** `POST`
-- **Input:** JSON object containing `username`, `password`, and `email`.
-- **Returns:** A response object indicating the result of the operation:
-  - `code`: Status code (`0` for success, `1` for username exists, `2` for email exists)
-  - `data`: Additional data (null in this case)
-  - `message`: Status message
+- **Input:** `UserRegistrationDto` with user registration information.
+- **Response:** User account creation status.
+- **Success Response Code:** `200 OK`
+- **Error Codes:** 
+  - `1`: Username already exists.
+  - `2`: Email already exists.
 
-**Example Request:**
-
-```json
-{
-  "username": "exempleUsername",
-  "password": "exempleMotDePasse",
-  "email": "testemail@gmail.com"
-}
-```
-
-**Example Response:**
-
-```json
-{
-  "code": "0",
-  "message": "Account created successfully"
-}
-```
-
----
-
-### 3. User Login
-
+### User Login
 - **Endpoint:** `/login`
 - **Method:** `GET`
-- **Input:** JSON object with `username` and `password`.
-- **Returns:** A response object with login result. On success, `data` contains user details.
+- **Input:** `UserLoginDto` with username and password.
+- **Response:** User login status and user details.
+- **Success Response Code:** `200 OK`
 
-**Example Request:**
-
-```json
-{
-  "username": "scartos",
-  "password": "TestMDP123!"
-}
-```
-
----
-
-### 4. Update User Bio
-
+### Update User Bio
 - **Endpoint:** `/user/updateBio`
 - **Method:** `POST`
-- **Input:** JSON object with `username`, `password`, and the new `bio`.
-- **Returns:** Status message indicating if the bio was updated successfully.
+- **Input:** `UserBioDto` with new bio content.
+- **Response:** Bio update confirmation.
+- **Success Response Code:** `200 OK`
 
----
+## Email Verification
 
-### 5. Verify Email (Backend Only)
-
-- **Endpoint:** `/verify?token=`
+### Verify User Email
+- **Endpoint:** `/user/verify`
 - **Method:** `GET`
-- **Return:** A message indicating the result of the email verification. Possible responses include:
-  - `Email verified successfully`
-  - `{"code": "1", "data": null, "message": "Invalid or expired verification token"}`
+- **Input:** `token` as URL parameter.
+- **Response:** Email verification status.
+- **Success Response Code:** `200 OK`
+- **Error Code:** 
+  - `1`: Invalid or expired verification token.
 
-### 6. Create a New Thread
+## Forum Thread Management
 
+### Create a New Thread
 - **Endpoint:** `/thread/create`
 - **Method:** `POST`
-- **Input:** JSON object containing `ownerId`, `title`, and `value` of the thread.
-- **Returns:** Status message indicating if the thread was created successfully.
+- **Input:** `ForumThreadCreateDto` with thread creation details.
+- **Response:** Thread creation status.
+- **Success Response Code:** `200 OK`
 
----
+### List All Threads
+- **Endpoint:** `/thread/all`
+- **Method:** `GET`
+- **Response:** List of all forum threads.
+- **Success Response Code:** `200 OK`
 
-### Error Codes and Messages
+## Password Management
 
-For each endpoint, the API may return different codes and messages indicating the result of the requested operation. Here are the common codes and their meanings:
+### Send Password Reset Email
+- **Endpoint:** `/user/sendPassword`
+- **Method:** `POST`
+- **Input:** `ResetPasswordEmailDto` with user email.
+- **Response:** Password reset email sending status.
+- **Success Response Code:** `200 OK`
 
-- `{"code": "0", ...}`: Operation completed successfully.
-- `{"code": "1", ...}`: Indicates a user-related error (e.g., user not found, username already exists).
-- `{"code": "2", ...}`: Indicates a data or input-related error (e.g., invalid password, email already exists, invalid verification token).
+### Reset User Password
+- **Endpoint:** `/user/resetPassword`
+- **Method:** `POST`
+- **Input:** `ResetPasswordDto` with reset token and new password.
+- **Response:** Password reset status.
+- **Success Response Code:** `200 OK`
 
-### Additional Notes
+## Error Handling
+- **Username Exists**: `1`
+- **Email Exists**: `2`
+- **Username Not Found**: `1`
+- **Invalid Password**: `2`
+- **Expired/Invalid Token**: `1`
+- **Invalid ID**: `1`
+- **Invalid Email**: `1`
+- **Invalid Thread Values**: `2`
+- **Email Not Verified**: `1`
+- **Invalid Reset Token**: `1`
 
-- Replace `http://{baseurl}:8080` with the actual base URL of your API service.
-- Ensure all data sent to POST endpoints is in JSON format.
-- Use appropriate HTTP methods for each request as specified.
+Each endpoint's response includes a code indicating the result (`0` for success, other values for specific errors) and a message detailing the outcome or error.
