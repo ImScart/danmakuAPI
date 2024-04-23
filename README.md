@@ -154,14 +154,14 @@ This documentation outlines the various endpoints of the API, their expected inp
 
 ### Expected Input
 
-```json
+```text
 ?token=83323f1b-a390-4766-b98e-476513fa6cc5
 ```
 ### Possible Outputs
-```json
+```text
 Email verified successfully
 ```
-```json
+```text
 Invalid or expired verification token
 ```
 
