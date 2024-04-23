@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.DTO.ForumThreadCreateDto;
 import com.example.demo.DTO.ForumThreadDto;
 import com.example.demo.Exceptions.InvalidIdException;
-import com.example.demo.Exceptions.ThreadValuesInvalidException;
+import com.example.demo.Exceptions.ValuesInvalidException;
 import com.example.demo.Repositories.ForumThreadRepository;
 import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Tables.ForumThread;
@@ -26,10 +26,15 @@ public class ForumThreadService {
     }
 
     public ForumThread createThread(ForumThreadCreateDto threadCreateDto) {
+        if (threadCreateDto.getOwnerId() == null || threadCreateDto.getOwnerId().toString().isEmpty()
+                || threadCreateDto.getTitle() == null || threadCreateDto.getTitle().isEmpty()
+                || threadCreateDto.getValue() == null || threadCreateDto.getValue().isEmpty()) {
+            throw new ValuesInvalidException("One of the values to create the thread is invalid.");
+        }
         UserAccount userAccount = userRepository.findById(threadCreateDto.getOwnerId())
                 .orElseThrow(() -> new InvalidIdException("User not found with ID: " + threadCreateDto.getOwnerId()));
         if (threadCreateDto.getTitle().isEmpty() || threadCreateDto.getValue().isEmpty()) {
-            throw new ThreadValuesInvalidException("One of the values to create the thread is invalid.");
+            throw new ValuesInvalidException("One of the values to create the thread is invalid.");
         }
         ForumThread thread = new ForumThread();
         thread.setTitle(threadCreateDto.getTitle());

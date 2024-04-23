@@ -7,6 +7,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.DTO.ResetPasswordDto;
+import com.example.demo.DTO.ResetPasswordEmailDto;
 import com.example.demo.DTO.UserBioDto;
 import com.example.demo.DTO.UserLoginDto;
 import com.example.demo.DTO.UserRegistrationDto;
@@ -19,6 +20,7 @@ import com.example.demo.Exceptions.InvalidPasswordException;
 import com.example.demo.Exceptions.InvalidResetTokenException;
 import com.example.demo.Exceptions.UsernameExistsException;
 import com.example.demo.Exceptions.UsernameNotFoundException;
+import com.example.demo.Exceptions.ValuesInvalidException;
 import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Tables.UserAccount;
 
@@ -34,6 +36,10 @@ public class UserService {
     }
 
     public UserAccount registerNewUser(UserRegistrationDto dto) {
+        if (dto.getUsername() == null || dto.getUsername().isEmpty() || dto.getPassword() == null
+                || dto.getPassword().isEmpty() || dto.getEmail() == null || dto.getEmail().isEmpty()) {
+            throw new ValuesInvalidException("One of the values to register the user is invalid.");
+        }
         if (userRepository.findByUsername(dto.getUsername()).isPresent()) {
             throw new UsernameExistsException("Username already exists.");
         }
@@ -55,12 +61,10 @@ public class UserService {
         return savedUser;
     }
 
-    public void setResetToken(String email)
-    {
+    public void setResetToken(String email) {
         UserAccount user = userRepository.findByEmail(email)
-        .orElseThrow(() -> new InvalidEmailException("Email not found"));
-        if(!user.getEmailIsVerified())
-        {
+                .orElseThrow(() -> new InvalidEmailException("Email not found"));
+        if (!user.getEmailIsVerified()) {
             throw new EmailIsNotVerifiedException("Email is not verified.");
         }
         String resetToken = UUID.randomUUID().toString();
@@ -69,16 +73,23 @@ public class UserService {
     }
 
     public UserAccount loginUser(UserLoginDto dto) {
+        if (dto.getUsername() == null || dto.getUsername().isEmpty() || dto.getPassword() == null
+                || dto.getPassword().isEmpty()) {
+            throw new ValuesInvalidException("One of the values to login the user is invalid.");
+        }
         UserAccount user = userRepository.findByUsername(dto.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         if (!dto.getPassword().equals(user.getPassword())) {
             throw new InvalidPasswordException("Invalid password");
         }
-
         return user;
     }
 
     public void updateUserBio(UserBioDto dto) {
+        if (dto.getUsername() == null || dto.getUsername().isEmpty() || dto.getPassword() == null
+                || dto.getPassword().isEmpty() || dto.getBio() == null || dto.getBio().isEmpty()) {
+            throw new ValuesInvalidException("One of the values to change the users bio is invalid.");
+        }
         UserAccount user = userRepository.findByUsername(dto.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
@@ -105,18 +116,27 @@ public class UserService {
 
         mailSender.send(message);
     }
-    public void sendResetEmail(String email, String token) {
+
+    public void sendResetEmail(ResetPasswordEmailDto dto, String token) {
+        if (dto.getEmail() == null || dto.getEmail().isEmpty()) {
+            throw new ValuesInvalidException("One of the values to send the email is invalid.");
+        }
         String verificationUrl = "http://144.217.83.146/resetPassword/verify?token=" + token;
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("danmakuverification@outlook.com");
-        message.setTo(email);
+        message.setTo(dto.getEmail());
         message.setSubject("Reset your password");
         message.setText("To reset your password, please click the link below:\n" + verificationUrl);
 
         mailSender.send(message);
     }
+
     public void updateUserPassword(ResetPasswordDto dto) {
+        if (dto.getToken() == null || dto.getToken().isEmpty() || dto.getPassword() == null
+                || dto.getPassword().isEmpty()) {
+            throw new ValuesInvalidException("One of the values to change the users password is invalid.");
+        }
         UserAccount user = userRepository.findByResetToken(dto.getToken())
                 .orElseThrow(() -> new InvalidResetTokenException("Invalid reset token"));
 

@@ -27,15 +27,13 @@ import com.example.demo.Exceptions.InvalidIdException;
 import com.example.demo.Exceptions.InvalidPasswordException;
 import com.example.demo.Exceptions.InvalidResetTokenException;
 import com.example.demo.Exceptions.ThreadAlreadyLikedByUserException;
-import com.example.demo.Exceptions.ThreadValuesInvalidException;
+import com.example.demo.Exceptions.ValuesInvalidException;
 import com.example.demo.Exceptions.UsernameExistsException;
 import com.example.demo.Exceptions.UsernameNotFoundException;
 import com.example.demo.Services.ForumThreadLikeService;
 import com.example.demo.Services.ForumThreadService;
 import com.example.demo.Services.UserService;
 import com.example.demo.Tables.UserAccount;
-
-import jakarta.validation.Valid;
 
 @RestController
 public class RoutesController {
@@ -52,16 +50,14 @@ public class RoutesController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<UserAccount>> registerUser(
-            @Valid @RequestBody UserRegistrationDto registrationDto) {
+    public ResponseEntity<ApiResponse<UserAccount>> registerUser(@RequestBody UserRegistrationDto registrationDto) {
         userService.registerNewUser(registrationDto);
         ApiResponse<UserAccount> response = new ApiResponse<>("0", "Account created successfully");
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/login")
-    public ResponseEntity<ApiResponse<UserAccount>> loginUser(
-            @Valid @RequestBody UserLoginDto loginDto) {
+    public ResponseEntity<ApiResponse<UserAccount>> loginUser(@RequestBody UserLoginDto loginDto) {
         UserAccount user = userService.loginUser(loginDto);
         ApiResponse<UserAccount> response = new ApiResponse<>("0", user);
         return ResponseEntity.ok(response);
@@ -76,16 +72,17 @@ public class RoutesController {
 
     @GetMapping("/user/verify")
     public ResponseEntity<String> verifyEmail(@RequestParam("token") String token) {
-        UserAccount user = userService.getUserByVerificationToken(token);
-
-        if (user == null) {
-            return ResponseEntity.badRequest().body("Invalid or expired verification token");
+        UserAccount user;
+        try {
+            user = userService.getUserByVerificationToken(token);
+        } catch (ExpiredOrInvalidTokenException e) {
+            return ResponseEntity.ok("Invalid or expired verification token");
         }
 
         user.setEmailIsVerified(true);
         userService.saveUser(user);
-
         return ResponseEntity.ok("Email verified successfully");
+
     }
 
     @PostMapping("/thread/create")
@@ -106,7 +103,7 @@ public class RoutesController {
             @RequestBody ResetPasswordEmailDto resetPasswordEmailDto) {
         UserAccount user = userService.getUserByEmail(resetPasswordEmailDto.getEmail());
         userService.setResetToken(resetPasswordEmailDto.getEmail());
-        userService.sendResetEmail(resetPasswordEmailDto.getEmail(), user.getResetToken());
+        userService.sendResetEmail(resetPasswordEmailDto, user.getResetToken());
         ApiResponse<UserAccount> response = new ApiResponse<>("0", "Password reset email has been sent");
         return ResponseEntity.ok(response);
     }
@@ -175,17 +172,17 @@ public class RoutesController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
-    // INVALID THREAD VALUES
-    @ExceptionHandler(ThreadValuesInvalidException.class)
-    public ResponseEntity<ApiResponse<String>> handleThreadValuesInvalidException(ThreadValuesInvalidException e) {
-        ApiResponse<String> response = new ApiResponse<>("2", e.getMessage());
+    // INVALID VALUES
+    @ExceptionHandler(ValuesInvalidException.class)
+    public ResponseEntity<ApiResponse<String>> handleThreadValuesInvalidException(ValuesInvalidException e) {
+        ApiResponse<String> response = new ApiResponse<>("3", e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     // EMAIL NOT VERIFIED
     @ExceptionHandler(EmailIsNotVerifiedException.class)
     public ResponseEntity<ApiResponse<String>> handleEmailIsNotVerifiedException(EmailIsNotVerifiedException e) {
-        ApiResponse<String> response = new ApiResponse<>("1", e.getMessage());
+        ApiResponse<String> response = new ApiResponse<>("2", e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
@@ -200,7 +197,7 @@ public class RoutesController {
     @ExceptionHandler(ThreadAlreadyLikedByUserException.class)
     public ResponseEntity<ApiResponse<String>> handleThreadAlreadyLikedByUserException(
             ThreadAlreadyLikedByUserException e) {
-        ApiResponse<String> response = new ApiResponse<>("1", e.getMessage());
+        ApiResponse<String> response = new ApiResponse<>("2", e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }

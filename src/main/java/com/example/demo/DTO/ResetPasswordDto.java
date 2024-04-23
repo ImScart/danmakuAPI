@@ -1,25 +1,22 @@
 package com.example.demo.DTO;
 
-public class ResetPasswordDto
-{
+public class ResetPasswordDto {
     private String token;
     private String password;
 
-    public String getToken()
-    {
+    public String getToken() {
         return token;
     }
-    public void setToken(String token)
-    {
-        this.token=token;
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public String getPassword()
-    {
+    public String getPassword() {
         return password;
     }
-    public void setPassword(String password)
-    {
-        this.password=password;
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

@@ -8,8 +8,8 @@ public class ForumThreadLikeDto {
 
     public ForumThreadLikeDto(Long id, Long ownerId, Long forumThreadId) {
         this.id = id;
-        this.ownerId=ownerId;
-        this.forumThreadId=forumThreadId;
+        this.ownerId = ownerId;
+        this.forumThreadId = forumThreadId;
     }
 
     public Long getId() {
@@ -20,21 +20,19 @@ public class ForumThreadLikeDto {
         this.id = id;
     }
 
-    public Long getOwnerId()
-    {
+    public Long getOwnerId() {
         return ownerId;
     }
-    public void setOwnerId(Long ownerId)
-    {
-        this.ownerId=ownerId;
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
     }
 
-    public Long getForumThreadId()
-    {
+    public Long getForumThreadId() {
         return forumThreadId;
     }
-    public void setForumThreadId(Long forumThreadId)
-    {
-        this.forumThreadId=forumThreadId;
+
+    public void setForumThreadId(Long forumThreadId) {
+        this.forumThreadId = forumThreadId;
     }
 }
