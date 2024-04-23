@@ -287,7 +287,7 @@ Invalid or expired verification token
 **Description:** Returns all threads in the database.
 ### Expected Input
 
-```json
+```text
 No input required
 ```
 ### Possible Outputs
