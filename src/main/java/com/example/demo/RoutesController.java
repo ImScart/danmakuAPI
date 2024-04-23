@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.DTO.ForumThreadCreateDto;
 import com.example.demo.DTO.ForumThreadDto;
+import com.example.demo.DTO.ForumThreadLikeDto;
 import com.example.demo.DTO.ResetPasswordDto;
 import com.example.demo.DTO.ResetPasswordEmailDto;
 import com.example.demo.DTO.UserBioDto;
@@ -25,9 +26,11 @@ import com.example.demo.Exceptions.InvalidEmailException;
 import com.example.demo.Exceptions.InvalidIdException;
 import com.example.demo.Exceptions.InvalidPasswordException;
 import com.example.demo.Exceptions.InvalidResetTokenException;
+import com.example.demo.Exceptions.ThreadAlreadyLikedByUserException;
 import com.example.demo.Exceptions.ThreadValuesInvalidException;
 import com.example.demo.Exceptions.UsernameExistsException;
 import com.example.demo.Exceptions.UsernameNotFoundException;
+import com.example.demo.Services.ForumThreadLikeService;
 import com.example.demo.Services.ForumThreadService;
 import com.example.demo.Services.UserService;
 import com.example.demo.Tables.UserAccount;
@@ -39,10 +42,13 @@ public class RoutesController {
 
     private final UserService userService;
     private final ForumThreadService threadService;
+    private final ForumThreadLikeService threadLikeService;
 
-    public RoutesController(UserService userService, ForumThreadService threadService) {
+    public RoutesController(UserService userService, ForumThreadService threadService,
+            ForumThreadLikeService forumThreadLikeService) {
         this.userService = userService;
         this.threadService = threadService;
+        this.threadLikeService = forumThreadLikeService;
     }
 
     @PostMapping("/register")
@@ -96,18 +102,27 @@ public class RoutesController {
     }
 
     @PostMapping("/user/sendPassword")
-    public ResponseEntity<ApiResponse<UserAccount>> resetPassword(@RequestBody ResetPasswordEmailDto resetPasswordEmailDto) {
+    public ResponseEntity<ApiResponse<UserAccount>> resetPassword(
+            @RequestBody ResetPasswordEmailDto resetPasswordEmailDto) {
         UserAccount user = userService.getUserByEmail(resetPasswordEmailDto.getEmail());
         userService.setResetToken(resetPasswordEmailDto.getEmail());
-        userService.sendResetEmail(resetPasswordEmailDto.getEmail(),user.getResetToken());
+        userService.sendResetEmail(resetPasswordEmailDto.getEmail(), user.getResetToken());
         ApiResponse<UserAccount> response = new ApiResponse<>("0", "Password reset email has been sent");
         return ResponseEntity.ok(response);
     }
+
     @PostMapping("/user/resetPassword")
-    public ResponseEntity<ApiResponse<UserAccount>> resetPasswordEmail(@RequestBody ResetPasswordDto resetPasswordDto)
-    {
+    public ResponseEntity<ApiResponse<UserAccount>> resetPasswordEmail(@RequestBody ResetPasswordDto resetPasswordDto) {
         userService.updateUserPassword(resetPasswordDto);
         ApiResponse<UserAccount> response = new ApiResponse<>("0", "Password has been reset");
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/thread/like")
+    public ResponseEntity<ApiResponse<String>> createThreadLike(@RequestBody ForumThreadLikeDto threadLikeDto) {
+        threadLikeService.likeThread(threadLikeDto.getOwnerId(), threadLikeDto.getForumThreadId());
+        threadLikeService.createForumThreadLike(threadLikeDto);
+        ApiResponse<String> response = new ApiResponse<>("0", "Thread liked successfully");
         return ResponseEntity.ok(response);
     }
 
@@ -177,6 +192,14 @@ public class RoutesController {
     // INVALID RESET TOKEN
     @ExceptionHandler(InvalidResetTokenException.class)
     public ResponseEntity<ApiResponse<String>> handleInvalidResetTokenException(InvalidResetTokenException e) {
+        ApiResponse<String> response = new ApiResponse<>("1", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    // THREAD ALREADY LIKED BY USER
+    @ExceptionHandler(ThreadAlreadyLikedByUserException.class)
+    public ResponseEntity<ApiResponse<String>> handleThreadAlreadyLikedByUserException(
+            ThreadAlreadyLikedByUserException e) {
         ApiResponse<String> response = new ApiResponse<>("1", e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
