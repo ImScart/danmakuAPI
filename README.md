@@ -435,3 +435,38 @@ No input required
     "message": "One of the values to comment the thread is invalid."
 }
 ```
+
+## Get Thread Comments
+
+**Endpoint:** `{baseURL}/thread/allComments`  
+**Method:** GET  
+**Description:** Gets all comments from a thread.
+### Expected Input
+
+```json
+{
+  "forumThreadId": "18"
+}
+```
+### Possible Outputs
+```json
+[
+    {
+        "ownerId": 22,
+        "threadId": 18,
+        "value": "Voici mon commentaire"
+    },
+    {
+        "ownerId": 22,
+        "threadId": 18,
+        "value": "Voici mon deuxieme commentaire"
+    }
+]
+```
+```json
+{
+    "code": "1",
+    "data": null,
+    "message": "Thread not found with ID: null"
+}
+```

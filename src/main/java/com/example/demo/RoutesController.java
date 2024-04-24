@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.DTO.ForumThreadCommentDto;
+import com.example.demo.DTO.ForumThreadCommentsDto;
 import com.example.demo.DTO.ForumThreadCreateDto;
 import com.example.demo.DTO.ForumThreadDto;
 import com.example.demo.DTO.ForumThreadLikeDto;
@@ -139,6 +140,12 @@ public class RoutesController {
         threadCommentService.createForumThreadComment(dto);
         ApiResponse<String> response = new ApiResponse<>("0", "Thread comment created successfully");
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/thread/allComments")
+    public ResponseEntity<List<ForumThreadCommentDto>> getAllThreadComments(@RequestBody ForumThreadCommentsDto dto) {
+        List<ForumThreadCommentDto> likes = threadCommentService.getCommentsByThreadId(dto);
+        return ResponseEntity.ok().body(likes);
     }
 
     // USERNAME IN USE
