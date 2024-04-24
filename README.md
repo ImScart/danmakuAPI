@@ -401,7 +401,6 @@ No input required
 
 ```json
 {
-  {
   "ownerId": "22",
   "threadId": "18",
   "value": "Voici mon deuxieme commentaire"
