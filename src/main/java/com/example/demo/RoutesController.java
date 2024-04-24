@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.DTO.CreateMapDto;
 import com.example.demo.DTO.ForumThreadCommentDto;
 import com.example.demo.DTO.ForumThreadCommentsDto;
 import com.example.demo.DTO.ForumThreadCreateDto;
@@ -37,8 +38,10 @@ import com.example.demo.Exceptions.UsernameNotFoundException;
 import com.example.demo.Services.ForumThreadCommentService;
 import com.example.demo.Services.ForumThreadLikeService;
 import com.example.demo.Services.ForumThreadService;
+import com.example.demo.Services.MapService;
 import com.example.demo.Services.SftpService;
 import com.example.demo.Services.UserService;
+import com.example.demo.Tables.Map;
 import com.example.demo.Tables.UserAccount;
 
 @RestController
@@ -49,14 +52,16 @@ public class RoutesController {
     private final ForumThreadLikeService threadLikeService;
     private final ForumThreadCommentService threadCommentService;
     private final SftpService sftpService;
+    private final MapService mapService;
 
     public RoutesController(UserService userService, ForumThreadService threadService,
-            ForumThreadLikeService forumThreadLikeService, ForumThreadCommentService threadCommentService,SftpService sftpService) {
+            ForumThreadLikeService forumThreadLikeService, ForumThreadCommentService threadCommentService,SftpService sftpService, MapService mapService) {
         this.userService = userService;
         this.threadService = threadService;
         this.threadLikeService = forumThreadLikeService;
         this.threadCommentService = threadCommentService;
         this.sftpService=sftpService;
+        this.mapService=mapService;
     }
 
     @PostMapping("/register")
@@ -153,12 +158,27 @@ public class RoutesController {
     }
 
     @PostMapping("/user/changeProfilePicture")
-    public ResponseEntity<ApiResponse<String>> handleFileUpload(@RequestParam("file") MultipartFile file,@RequestParam("id") Integer id) {
+    public ResponseEntity<ApiResponse<String>> handleProfilePictureUpload(@RequestParam("file") MultipartFile file,@RequestParam("id") Integer id) {
         try {
             String remoteDir = "/var/www/html/profilePictures";
-            sftpService.uploadFileToSftp(file, remoteDir);
+            sftpService.uploadFileToSftp(file, remoteDir,"id"+".png");
             userService.updateUserProfilePicture(id);
             ApiResponse<String> response = new ApiResponse<>("0", "Profile picture has been changed");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            ApiResponse<String> response = new ApiResponse<>("2", "An issue has occured");
+            return ResponseEntity.ok(response);
+        }
+    }
+
+    @PostMapping("/maps/upload")
+    public ResponseEntity<ApiResponse<String>> handleMapsUpload(CreateMapDto dto) {
+        try {
+            Map savedMap = mapService.uploadNewMap(dto);
+            String remoteDir = "/var/www/html/maps";
+            sftpService.uploadFileToSftp(dto.getFile(), remoteDir,savedMap.getId().toString()+".club");
+            mapService.updateMapPath(savedMap.getId());
+            ApiResponse<String> response = new ApiResponse<>("0", "Map has been uploaded");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             ApiResponse<String> response = new ApiResponse<>("2", "An issue has occured");

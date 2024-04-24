@@ -75,7 +75,8 @@ This documentation outlines the various endpoints of the API, their expected inp
         "emailIsVerified": false,
         "verificationToken": "c89148bf-43b7-4348-af45-307555237ed6",
         "resetToken": "e91fa556-cc39-4a7b-a8a8-7b797261c336",
-        "profilePicture": null
+        "profilePicture": null,
+		"isAdmin": "true"
     },
     "message": null
 }
@@ -151,7 +152,7 @@ This documentation outlines the various endpoints of the API, their expected inp
 
 **Endpoint:** `{baseURL}/user/changeProfilePicture`  
 **Method:** POST  
-**Description:** Uploads a profile picture in web server and changed profilePicture in users account.
+**Description:** Uploads a profile picture in web server and changes profilePicture in users account.
 ### Expected Input
 
 ```text
@@ -513,5 +514,51 @@ No input required
     "code": "1",
     "data": null,
     "message": "Thread not found with ID: null"
+}
+```
+
+## Upload a map
+
+**Endpoint:** `{baseURL}/maps/upload`  
+**Method:** POST  
+**Description:** Uploads a map in web server and adds a reference to it on the database.
+### Expected Input
+
+```text
+{
+This endpoint expects a multipart/form-data request with the following parts:
+- ownerID (integer, required): The ID of the owner creating the map.
+- file (file, required): The map file to upload.
+- name (string, required): The name of the map.
+- difficulty (string, required): The difficulty level of the map. Accepted values: "easy", "medium", "hard", "lunatic".
+}
+```
+### Possible Outputs
+```json
+{
+    "code": "0",
+    "data": null,
+    "message": "Map has been uoploaded"
+}
+```
+```json
+{
+    "code": "1",
+    "data": null,
+    "message": "User not found"
+}
+```
+```json
+{
+    "code": "2",
+    "data": null,
+    "message": "An issue has occured"
+}
+```
+```json
+{
+    "code": "3",
+    "data": null,
+    "message": "One of the values to upload a map is invalid."
 }
 ```

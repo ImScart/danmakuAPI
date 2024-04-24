@@ -24,7 +24,7 @@ public class SftpService {
     public int getPort() { return port; }
     public void setPort(int port) { this.port = port; }
 
-    public void uploadFileToSftp(MultipartFile file, String remoteDir) throws Exception {
+    public void uploadFileToSftp(MultipartFile file, String remoteDir, String newFileName) throws Exception {
         JSch jsch = new JSch();
         Session session = null;
         Channel channel = null;
@@ -45,7 +45,7 @@ public class SftpService {
             channelSftp.cd(remoteDir);
 
             try (InputStream inputStream = file.getInputStream()) {
-                channelSftp.put(inputStream, file.getOriginalFilename());
+                channelSftp.put(inputStream, newFileName);
             }
         } finally {
             if (channelSftp != null) {

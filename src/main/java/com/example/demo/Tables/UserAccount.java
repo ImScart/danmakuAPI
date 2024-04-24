@@ -25,6 +25,7 @@ public class UserAccount {
     private String verificationToken;
     private String resetToken;
     private String profilePicture;
+    private boolean isAdmin;
 
     public UserAccount() {
     }
@@ -113,5 +114,15 @@ public class UserAccount {
 
     public void setUserSince(LocalDateTime userSince) {
         this.userSince = userSince;
+    }
+
+    public boolean getIsAdmin()
+    {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean isAdmin)
+    {
+        this.isAdmin=isAdmin;
     }
 }
