@@ -75,6 +75,6 @@ public class Map {
     }
 
     public enum Difficulty {
-        EASY, MEDIUM, HARD, LUNCATIC
+        easy, medium, hard, lunatic
     }
 }

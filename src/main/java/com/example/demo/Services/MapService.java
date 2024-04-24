@@ -34,7 +34,7 @@ public class MapService {
         map.setOwnerID(userAccount.getId());
         map.setName(dto.getName());
         map.setDifficulty(Difficulty.valueOf(dto.getDifficulty()));
-
+        map.setIsAdminVerified(false);
         Map savedMap = mapRepository.save(map);
 
         return savedMap;
