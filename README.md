@@ -185,13 +185,6 @@ This endpoint expects a multipart/form-data request with the following parts:
 ```
 ```json
 {
-    "code": "2",
-    "data": null,
-    "message": "An issue has occured"
-}
-```
-```json
-{
     "code": "3",
     "data": null,
     "message": "One of the values to change the users profile picture is invalid."
