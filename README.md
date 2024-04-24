@@ -67,13 +67,14 @@ This documentation outlines the various endpoints of the API, their expected inp
     "code": "0",
     "data": {
         "id": 22,
+        "userSince": "2024-04-10T19:44:50",
         "username": "scart",
-        "password": "NouveauMotDePasse",
+        "password": "123",
         "email": "scartcontact@gmail.com",
-        "bio": null,
-        "emailIsVerified": true,
+        "bio": "Voici ma nouvelle bio :)",
+        "emailIsVerified": false,
         "verificationToken": "c89148bf-43b7-4348-af45-307555237ed6",
-        "resetToken": "0afb20fd-6caa-4274-bf3b-b10126ad78dd",
+        "resetToken": "e91fa556-cc39-4a7b-a8a8-7b797261c336",
         "profilePicture": null
     },
     "message": null

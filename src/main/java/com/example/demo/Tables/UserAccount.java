@@ -1,5 +1,8 @@
 package com.example.demo.Tables;
 
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,6 +15,8 @@ public class UserAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "userSince")
+    private LocalDateTime userSince;
     private String username;
     private String password;
     private String email;
@@ -100,5 +105,13 @@ public class UserAccount {
 
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public LocalDateTime getUserSince() {
+        return userSince;
+    }
+
+    public void setUserSince(LocalDateTime userSince) {
+        this.userSince = userSince;
     }
 }
