@@ -406,7 +406,6 @@ No input required
   "threadId": "18",
   "value": "Voici mon deuxieme commentaire"
 }
-}
 ```
 ### Possible Outputs
 ```json
