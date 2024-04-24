@@ -287,7 +287,7 @@ Invalid or expired verification token
 **Description:** Returns all threads in the database.
 ### Expected Input
 
-```json
+```text
 No input required
 ```
 ### Possible Outputs
@@ -389,5 +389,51 @@ No input required
     "code": "1",
     "data": null,
     "message": "Thread not found with ID: null"
+}
+```
+
+## Create A Thread Comment
+
+**Endpoint:** `{baseURL}/thread/comment/create`  
+**Method:** POST  
+**Description:** Created a thread comment in the database.
+### Expected Input
+
+```json
+{
+  {
+  "ownerId": "22",
+  "threadId": "18",
+  "value": "Voici mon deuxieme commentaire"
+}
+}
+```
+### Possible Outputs
+```json
+{
+    "code": "0",
+    "data": null,
+    "message": "Thread comment created successfully"
+}
+```
+```json
+{
+    "code": "1",
+    "data": null,
+    "message": "User not found with ID: 255"
+}
+```
+```json
+{
+    "code": "1",
+    "data": null,
+    "message": "Thread not found with ID: 1444"
+}
+```
+```json
+{
+    "code": "3",
+    "data": null,
+    "message": "One of the values to comment the thread is invalid."
 }
 ```

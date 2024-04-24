@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.DTO.ForumThreadCommentDto;
 import com.example.demo.DTO.ForumThreadCreateDto;
 import com.example.demo.DTO.ForumThreadDto;
 import com.example.demo.DTO.ForumThreadLikeDto;
@@ -31,6 +32,7 @@ import com.example.demo.Exceptions.ThreadAlreadyLikedByUserException;
 import com.example.demo.Exceptions.ValuesInvalidException;
 import com.example.demo.Exceptions.UsernameExistsException;
 import com.example.demo.Exceptions.UsernameNotFoundException;
+import com.example.demo.Services.ForumThreadCommentService;
 import com.example.demo.Services.ForumThreadLikeService;
 import com.example.demo.Services.ForumThreadService;
 import com.example.demo.Services.UserService;
@@ -42,12 +44,14 @@ public class RoutesController {
     private final UserService userService;
     private final ForumThreadService threadService;
     private final ForumThreadLikeService threadLikeService;
+    private final ForumThreadCommentService threadCommentService;
 
     public RoutesController(UserService userService, ForumThreadService threadService,
-            ForumThreadLikeService forumThreadLikeService) {
+            ForumThreadLikeService forumThreadLikeService, ForumThreadCommentService threadCommentService) {
         this.userService = userService;
         this.threadService = threadService;
         this.threadLikeService = forumThreadLikeService;
+        this.threadCommentService = threadCommentService;
     }
 
     @PostMapping("/register")
@@ -128,6 +132,13 @@ public class RoutesController {
     public ResponseEntity<List<ForumThreadLikeDto>> getAllThreadLikes(@RequestBody ForumThreadLikesDto dto) {
         List<ForumThreadLikeDto> likes = threadLikeService.getLikesByThreadId(dto);
         return ResponseEntity.ok().body(likes);
+    }
+
+    @PostMapping("/thread/comment/create")
+    public ResponseEntity<ApiResponse<String>> createThreadComment(@RequestBody ForumThreadCommentDto dto) {
+        threadCommentService.createForumThreadComment(dto);
+        ApiResponse<String> response = new ApiResponse<>("0", "Thread comment created successfully");
+        return ResponseEntity.ok(response);
     }
 
     // USERNAME IN USE
