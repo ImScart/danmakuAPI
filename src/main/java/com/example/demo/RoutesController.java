@@ -129,7 +129,7 @@ public class RoutesController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/thread/allLikes")
+    @PostMapping("/thread/allLikes")
     public ResponseEntity<List<ForumThreadLikeDto>> getAllThreadLikes(@RequestBody ForumThreadLikesDto dto) {
         List<ForumThreadLikeDto> likes = threadLikeService.getLikesByThreadId(dto);
         return ResponseEntity.ok().body(likes);
@@ -142,7 +142,7 @@ public class RoutesController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/thread/allComments")
+    @PostMapping("/thread/allComments")
     public ResponseEntity<List<ForumThreadCommentDto>> getAllThreadComments(@RequestBody ForumThreadCommentsDto dto) {
         List<ForumThreadCommentDto> likes = threadCommentService.getCommentsByThreadId(dto);
         return ResponseEntity.ok().body(likes);

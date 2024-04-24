@@ -360,7 +360,7 @@ No input required
 ## Get Thread Likes
 
 **Endpoint:** `{baseURL}/thread/allLikes`  
-**Method:** GET  
+**Method:** POST  
 **Description:** Gets all likes from a specific thread ID
 ### Expected Input
 
@@ -439,7 +439,7 @@ No input required
 ## Get Thread Comments
 
 **Endpoint:** `{baseURL}/thread/allComments`  
-**Method:** GET  
+**Method:** POST  
 **Description:** Gets all comments from a thread.
 ### Expected Input
 
