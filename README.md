@@ -147,6 +147,57 @@ This documentation outlines the various endpoints of the API, their expected inp
 }
 ```
 
+## Change profile picture
+
+**Endpoint:** `{baseURL}/user/changeProfilePicture`  
+**Method:** POST  
+**Description:** Uploads a profile picture in web server and changed profilePicture in users account.
+### Expected Input
+
+```text
+{
+This endpoint expects a multipart/form-data request with the following parts:
+- `file`: The profile picture file to upload. The file should be a valid image format (preferably PNG).
+- `id`: The user ID as an integer to associate the uploaded file with a specific user profile.
+}
+```
+### Possible Outputs
+```json
+{
+    "code": "0",
+    "data": null,
+    "message": "Profile picture has been changed"
+}
+```
+```json
+{
+    "code": "1",
+    "data": null,
+    "message": "User not found"
+}
+```
+```json
+{
+    "code": "2",
+    "data": null,
+    "message": "An issue has occured"
+}
+```
+```json
+{
+    "code": "2",
+    "data": null,
+    "message": "An issue has occured"
+}
+```
+```json
+{
+    "code": "3",
+    "data": null,
+    "message": "One of the values to change the users profile picture is invalid."
+}
+```
+
 ## User Email Verification *INTERNAL USE ONLY*
 
 **Endpoint:** `{baseURL}/user/verify`  

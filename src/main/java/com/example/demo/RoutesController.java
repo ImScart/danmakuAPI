@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.DTO.ForumThreadCommentDto;
 import com.example.demo.DTO.ForumThreadCommentsDto;
@@ -36,6 +37,7 @@ import com.example.demo.Exceptions.UsernameNotFoundException;
 import com.example.demo.Services.ForumThreadCommentService;
 import com.example.demo.Services.ForumThreadLikeService;
 import com.example.demo.Services.ForumThreadService;
+import com.example.demo.Services.SftpService;
 import com.example.demo.Services.UserService;
 import com.example.demo.Tables.UserAccount;
 
@@ -46,13 +48,15 @@ public class RoutesController {
     private final ForumThreadService threadService;
     private final ForumThreadLikeService threadLikeService;
     private final ForumThreadCommentService threadCommentService;
+    private final SftpService sftpService;
 
     public RoutesController(UserService userService, ForumThreadService threadService,
-            ForumThreadLikeService forumThreadLikeService, ForumThreadCommentService threadCommentService) {
+            ForumThreadLikeService forumThreadLikeService, ForumThreadCommentService threadCommentService,SftpService sftpService) {
         this.userService = userService;
         this.threadService = threadService;
         this.threadLikeService = forumThreadLikeService;
         this.threadCommentService = threadCommentService;
+        this.sftpService=sftpService;
     }
 
     @PostMapping("/register")
@@ -146,6 +150,20 @@ public class RoutesController {
     public ResponseEntity<List<ForumThreadCommentDto>> getAllThreadComments(@RequestBody ForumThreadCommentsDto dto) {
         List<ForumThreadCommentDto> likes = threadCommentService.getCommentsByThreadId(dto);
         return ResponseEntity.ok().body(likes);
+    }
+
+    @PostMapping("/user/changeProfilePicture")
+    public ResponseEntity<ApiResponse<String>> handleFileUpload(@RequestParam("file") MultipartFile file,@RequestParam("id") Integer id) {
+        try {
+            String remoteDir = "/var/www/html/profilePictures";
+            sftpService.uploadFileToSftp(file, remoteDir);
+            userService.updateUserProfilePicture(id);
+            ApiResponse<String> response = new ApiResponse<>("0", "Profile picture has been changed");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            ApiResponse<String> response = new ApiResponse<>("2", "An issue has occured");
+            return ResponseEntity.ok(response);
+        }
     }
 
     // USERNAME IN USE

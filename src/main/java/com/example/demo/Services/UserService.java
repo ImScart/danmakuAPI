@@ -1,5 +1,4 @@
 package com.example.demo.Services;
-
 import java.util.UUID;
 
 import org.springframework.mail.SimpleMailMessage;
@@ -141,6 +140,17 @@ public class UserService {
                 .orElseThrow(() -> new InvalidResetTokenException("Invalid reset token"));
 
         user.setPassword(dto.getPassword());
+        userRepository.save(user);
+    }
+
+    public void updateUserProfilePicture(Integer id) {
+        if (id == null || id.toString().isEmpty()) {
+            throw new ValuesInvalidException("One of the values to change the users profile picture is invalid.");
+        }
+        UserAccount user = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        user.setProfilePicture("http://144.217.83.146/profilePictures/"+id+".png");
         userRepository.save(user);
     }
 
