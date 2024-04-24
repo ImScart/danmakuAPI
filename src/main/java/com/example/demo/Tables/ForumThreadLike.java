@@ -23,7 +23,7 @@ public class ForumThreadLike {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "forumThreadID", nullable = false)
-    private ForumThread forumThreadID;
+    private ForumThread forumThread;
 
     public Long getId() {
         return id;
@@ -41,11 +41,11 @@ public class ForumThreadLike {
         this.userAccount = userAccount;
     }
 
-    public ForumThread getForumThreadID() {
-        return forumThreadID;
+    public ForumThread getForumThread() {
+        return forumThread;
     }
 
-    public void setForumThreadID(ForumThread forumThreadID) {
-        this.forumThreadID = forumThreadID;
+    public void setForumThread(ForumThread forumThread) {
+        this.forumThread = forumThread;
     }
 }

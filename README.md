@@ -287,7 +287,7 @@ Invalid or expired verification token
 **Description:** Returns all threads in the database.
 ### Expected Input
 
-```text
+```json
 No input required
 ```
 ### Possible Outputs
@@ -354,5 +354,40 @@ No input required
     "code": "3",
     "data": null,
     "message": "One of the values to like the thread is invalid."
+}
+```
+
+## Get Thread Likes
+
+**Endpoint:** `{baseURL}/thread/allLikes`  
+**Method:** GET  
+**Description:** Gets all likes from a specific thread ID
+### Expected Input
+
+```json
+{
+  "forumThreadId": "18"
+}
+```
+### Possible Outputs
+```json
+[
+    {
+        "id": 2,
+        "ownerId": 22,
+        "forumThreadId": 18
+    },
+    {
+        "id": 3,
+        "ownerId": 23,
+        "forumThreadId": 18
+    }
+]
+```
+```json
+{
+    "code": "1",
+    "data": null,
+    "message": "Thread not found with ID: null"
 }
 ```

@@ -1,8 +1,12 @@
 package com.example.demo.Services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.demo.DTO.ForumThreadLikeDto;
+import com.example.demo.DTO.ForumThreadLikesDto;
 import com.example.demo.Exceptions.InvalidIdException;
 import com.example.demo.Exceptions.ThreadAlreadyLikedByUserException;
 import com.example.demo.Exceptions.ValuesInvalidException;
@@ -28,7 +32,7 @@ public class ForumThreadLikeService {
     }
 
     public void likeThread(Long userId, Long threadId) {
-        if (forumThreadLikeRepository.existsByUserAccount_IdAndForumThreadID_Id(userId, threadId)) {
+        if (forumThreadLikeRepository.existsByUserAccount_IdAndForumThread_Id(userId, threadId)) {
             throw new ThreadAlreadyLikedByUserException("User has already liked the thread");
         }
     }
@@ -45,8 +49,29 @@ public class ForumThreadLikeService {
                         () -> new InvalidIdException("Thread not found with ID: " + threadLikeDto.getForumThreadId()));
         ForumThreadLike threadLike = new ForumThreadLike();
         threadLike.setUserAccount(userAccount);
-        threadLike.setForumThreadID(forumThread);
+        threadLike.setForumThread(forumThread);
 
         return forumThreadLikeRepository.save(threadLike);
     }
+
+    public List<ForumThreadLikeDto> getLikesByThreadId(ForumThreadLikesDto dto) {
+        if(dto.getForumThreadId()==null||dto.getForumThreadId().toString().isEmpty())
+        {
+            throw new InvalidIdException("Thread not found with ID: " + dto.getForumThreadId());
+        }
+        List<ForumThreadLike> threadsLikes = forumThreadLikeRepository.findAllByForumThread_Id(dto.getForumThreadId());
+        List<ForumThreadLikeDto> threadLikeDTOs = new ArrayList<>();
+
+        for (ForumThreadLike threadLike : threadsLikes) {
+            ForumThreadLikeDto threadLikeDto = new ForumThreadLikeDto(
+                    threadLike.getId(),
+                    threadLike.getUserAccount().getId(),
+                    threadLike.getForumThread().getId());
+
+            threadLikeDTOs.add(threadLikeDto);
+        }
+
+        return threadLikeDTOs;
+    }
+
 }

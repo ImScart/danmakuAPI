@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.DTO.ForumThreadCreateDto;
 import com.example.demo.DTO.ForumThreadDto;
 import com.example.demo.DTO.ForumThreadLikeDto;
+import com.example.demo.DTO.ForumThreadLikesDto;
 import com.example.demo.DTO.ResetPasswordDto;
 import com.example.demo.DTO.ResetPasswordEmailDto;
 import com.example.demo.DTO.UserBioDto;
@@ -121,6 +122,12 @@ public class RoutesController {
         threadLikeService.createForumThreadLike(threadLikeDto);
         ApiResponse<String> response = new ApiResponse<>("0", "Thread liked successfully");
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/thread/allLikes")
+    public ResponseEntity<List<ForumThreadLikeDto>> getAllThreadLikes(@RequestBody ForumThreadLikesDto dto) {
+        List<ForumThreadLikeDto> likes = threadLikeService.getLikesByThreadId(dto);
+        return ResponseEntity.ok().body(likes);
     }
 
     // USERNAME IN USE
