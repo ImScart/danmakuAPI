@@ -50,7 +50,7 @@ This documentation outlines the various endpoints of the API, their expected inp
 ## User Login
 
 **Endpoint:** `{baseURL}/login`  
-**Method:** GET  
+**Method:** POST  
 **Description:** Logs in the user and returns all the information stored in the database.
 
 ### Expected Input

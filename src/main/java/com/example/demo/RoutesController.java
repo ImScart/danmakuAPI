@@ -62,7 +62,7 @@ public class RoutesController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<ApiResponse<UserAccount>> loginUser(@RequestBody UserLoginDto loginDto) {
         UserAccount user = userService.loginUser(loginDto);
         ApiResponse<UserAccount> response = new ApiResponse<>("0", user);

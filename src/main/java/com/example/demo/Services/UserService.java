@@ -106,7 +106,7 @@ public class UserService {
     }
 
     private void sendVerificationEmail(String email, String token) {
-        String verificationUrl = "http://127.0.0.1:8080/user/verify?token=" + token;
+        String verificationUrl = "http://144.217.83.146:8080/user/verify?token=" + token;
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("danmakuverification@outlook.com");
@@ -121,7 +121,7 @@ public class UserService {
         if (dto.getEmail() == null || dto.getEmail().isEmpty()) {
             throw new ValuesInvalidException("One of the values to send the email is invalid.");
         }
-        String verificationUrl = "http://144.217.83.146/resetPassword/verify?token=" + token;
+        String verificationUrl = "http://144.217.83.146/resetPassword.html?token=" + token;
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("danmakuverification@outlook.com");
