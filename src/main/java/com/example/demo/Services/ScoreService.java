@@ -1,8 +1,11 @@
 package com.example.demo.Services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.demo.DTO.CreateScoreDto;
+import com.example.demo.DTO.UserTotalScoreDto;
 import com.example.demo.Exceptions.InvalidIdException;
 import com.example.demo.Exceptions.ValuesInvalidException;
 import com.example.demo.Repositories.MapRepository;
@@ -42,5 +45,9 @@ public class ScoreService {
         score.setCreated(java.time.LocalDateTime.now());
         score.setValue(dto.getValue());
         return scoreRepository.save(score);
+    }
+
+    public List<UserTotalScoreDto> getTotalScoresForEachUser() {
+        return scoreRepository.findTotalScoresForEachUser();
     }
 }

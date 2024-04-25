@@ -718,3 +718,29 @@ No input required
     "message": "One of the values to create score is invalid."
 }
 ```
+
+## Get Score Leaderboard
+
+**Endpoint:** `{baseURL}/score/leaderboard`  
+**Method:** GET  
+**Description:** Gets all scores from users in database and creates a leaderboard
+### Expected Input
+
+```text
+No input required
+```
+### Possible Outputs
+```json
+[
+    {
+        "ownerId": 22,
+        "username": "scart",
+        "totalScore": 30990
+    },
+    {
+        "ownerId": 23,
+        "username": "nomUtilisateur",
+        "totalScore": 33500
+    }
+]
+```

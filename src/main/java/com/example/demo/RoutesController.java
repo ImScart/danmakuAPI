@@ -28,6 +28,7 @@ import com.example.demo.DTO.ResetPasswordEmailDto;
 import com.example.demo.DTO.UserBioDto;
 import com.example.demo.DTO.UserLoginDto;
 import com.example.demo.DTO.UserRegistrationDto;
+import com.example.demo.DTO.UserTotalScoreDto;
 import com.example.demo.Exceptions.EmailExistsException;
 import com.example.demo.Exceptions.EmailIsNotVerifiedException;
 import com.example.demo.Exceptions.ExpiredOrInvalidTokenException;
@@ -219,6 +220,12 @@ public class RoutesController {
         scoreService.createScore(dto);
         ApiResponse<String> response = new ApiResponse<>("0", "Score created successfully");
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/score/leaderboard")
+    public ResponseEntity<List<UserTotalScoreDto>> getScoreLeaderboard() {
+        List<UserTotalScoreDto> listeDeScore = scoreService.getTotalScoresForEachUser();
+        return ResponseEntity.ok().body(listeDeScore);
     }
 
     // USERNAME IN USE
