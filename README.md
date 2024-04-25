@@ -499,11 +499,15 @@ No input required
 [
     {
         "ownerId": 22,
+        "ownerName": "scart",
+        "ownerProfilePicture": "http://144.217.83.146/profilePictures/22.png",
         "threadId": 18,
         "value": "Voici mon commentaire"
     },
     {
         "ownerId": 22,
+        "ownerName": "scart",
+        "ownerProfilePicture": "http://144.217.83.146/profilePictures/22.png",
         "threadId": 18,
         "value": "Voici mon deuxieme commentaire"
     }
@@ -571,7 +575,6 @@ This endpoint expects a multipart/form-data request with the following parts:
 ### Expected Input
 
 ```text
-{
 No input required
 ```
 ### Possible Outputs

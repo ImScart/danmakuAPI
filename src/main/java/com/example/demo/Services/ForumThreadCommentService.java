@@ -60,6 +60,8 @@ public class ForumThreadCommentService {
         for (ForumThreadComment threadComment : threadComments) {
             ForumThreadCommentDto threadCommentDto = new ForumThreadCommentDto(
                     threadComment.getOwner().getId(),
+                    threadComment.getOwner().getUsername(),
+                    threadComment.getOwner().getProfilePicture(),
                     threadComment.getThread().getId(),
                     threadComment.getValue());
 
