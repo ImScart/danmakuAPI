@@ -1,7 +1,7 @@
 package com.example.demo.DTO;
 
 public class MapsDto {
-    private Integer id;
+    private Long id;
     private String ownerName;
     private String ownerProfilePicture;
     private String name;
@@ -13,7 +13,7 @@ public class MapsDto {
     public MapsDto() {
     }
 
-    public MapsDto(Integer id, String ownerName, String ownerProfilePicture, String name, String difficulty, String downloadUrl, Boolean isAdminVerified) {
+    public MapsDto(Long id, String ownerName, String ownerProfilePicture, String name, String difficulty, String downloadUrl, Boolean isAdminVerified) {
         this.id = id;
         this.ownerName = ownerName;
         this.ownerProfilePicture=ownerProfilePicture;
@@ -23,11 +23,11 @@ public class MapsDto {
         this.isAdminVerified = isAdminVerified;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

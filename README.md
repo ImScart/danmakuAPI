@@ -542,7 +542,7 @@ This endpoint expects a multipart/form-data request with the following parts:
 {
     "code": "0",
     "data": null,
-    "message": "Map has been uoploaded"
+    "message": "Map has been uploaded"
 }
 ```
 ```json
@@ -590,4 +590,87 @@ No input required
         "isAdminVerified": false
     }
 ]
+```
+
+## Create A Map Comment
+
+**Endpoint:** `{baseURL}/thread/comment/create`  
+**Method:** POST  
+**Description:** Created a map comment in the database.
+### Expected Input
+
+```json
+{
+  "ownerId": "22",
+  "mapId": "2",
+  "value": "Voici mon premier commentaire"
+}
+```
+### Possible Outputs
+```json
+{
+    "code": "0",
+    "data": null,
+    "message": "Map comment created successfully"
+}
+```
+```json
+{
+    "code": "1",
+    "data": null,
+    "message": "User not found with ID: 2222"
+}
+```
+```json
+{
+    "code": "1",
+    "data": null,
+    "message": "Map not found with ID: 22"
+}
+```
+```json
+{
+    "code": "3",
+    "data": null,
+    "message": "One of the values to comment the map is invalid."
+}
+```
+
+## Get Map Comments
+
+**Endpoint:** `{baseURL}/map/allComments`  
+**Method:** POST  
+**Description:** Gets all comments from a map.
+### Expected Input
+
+```json
+{
+  "mapId": "2"
+}
+```
+### Possible Outputs
+```json
+[
+    {
+        "ownerId": 22,
+        "ownerName": "scart",
+        "ownerProfilePicture": "http://144.217.83.146/profilePictures/22.png",
+        "mapId": 2,
+        "value": "Voici mon premier commentaire"
+    },
+    {
+        "ownerId": 22,
+        "ownerName": "scart",
+        "ownerProfilePicture": "http://144.217.83.146/profilePictures/22.png",
+        "mapId": 2,
+        "value": "Voici mon deuxieme commentaire"
+    }
+]
+```
+```json
+{
+    "code": "1",
+    "data": null,
+    "message": "Map not found with ID: null"
+}
 ```

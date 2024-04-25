@@ -44,7 +44,7 @@ public class MapService {
         return savedMap;
     }
 
-    public void updateMapPath(Integer id) {
+    public void updateMapPath(Long id) {
         if (id == null || id.toString().isEmpty()) {
             throw new ValuesInvalidException("One of the values to upload a map is invalid.");
         }
@@ -68,7 +68,6 @@ public class MapService {
                 map.getDownloadUrl(),
                 map.getIsAdminVerified()
                 );
-                
             mapDTOs.add(threadDto);
         }
         return mapDTOs;

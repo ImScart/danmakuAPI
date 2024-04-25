@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.DTO.CreateMapCommentDto;
 import com.example.demo.DTO.CreateMapDto;
 import com.example.demo.DTO.ForumThreadCommentDto;
 import com.example.demo.DTO.ForumThreadCommentsDto;
@@ -19,6 +20,7 @@ import com.example.demo.DTO.ForumThreadCreateDto;
 import com.example.demo.DTO.ForumThreadDto;
 import com.example.demo.DTO.ForumThreadLikeDto;
 import com.example.demo.DTO.ForumThreadLikesDto;
+import com.example.demo.DTO.MapCommentsDto;
 import com.example.demo.DTO.MapsDto;
 import com.example.demo.DTO.ResetPasswordDto;
 import com.example.demo.DTO.ResetPasswordEmailDto;
@@ -39,6 +41,7 @@ import com.example.demo.Exceptions.UsernameNotFoundException;
 import com.example.demo.Services.ForumThreadCommentService;
 import com.example.demo.Services.ForumThreadLikeService;
 import com.example.demo.Services.ForumThreadService;
+import com.example.demo.Services.MapCommentService;
 import com.example.demo.Services.MapService;
 import com.example.demo.Services.SftpService;
 import com.example.demo.Services.UserService;
@@ -54,15 +57,17 @@ public class RoutesController {
     private final ForumThreadCommentService threadCommentService;
     private final SftpService sftpService;
     private final MapService mapService;
+    private final MapCommentService mapCommentService;
 
     public RoutesController(UserService userService, ForumThreadService threadService,
-            ForumThreadLikeService forumThreadLikeService, ForumThreadCommentService threadCommentService,SftpService sftpService, MapService mapService) {
+            ForumThreadLikeService forumThreadLikeService, ForumThreadCommentService threadCommentService,SftpService sftpService, MapService mapService, MapCommentService mapCommentService) {
         this.userService = userService;
         this.threadService = threadService;
         this.threadLikeService = forumThreadLikeService;
         this.threadCommentService = threadCommentService;
         this.sftpService=sftpService;
         this.mapService=mapService;
+        this.mapCommentService=mapCommentService;
     }
 
     @PostMapping("/register")
@@ -191,6 +196,19 @@ public class RoutesController {
     public ResponseEntity<List<MapsDto>> getAllMaps() {
         List<MapsDto>maps = mapService.getAllMaps();
         return ResponseEntity.ok().body(maps);
+    }
+
+    @PostMapping("/map/comment/create")
+    public ResponseEntity<ApiResponse<String>> createMapComment(@RequestBody CreateMapCommentDto dto) {
+        mapCommentService.createMapComment(dto);
+        ApiResponse<String> response = new ApiResponse<>("0", "Map comment created successfully");
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/map/allComments")
+    public ResponseEntity<List<CreateMapCommentDto>> getAllMapComments(@RequestBody MapCommentsDto dto) {
+        List<CreateMapCommentDto> comments = mapCommentService.getCommentsByMapId(dto);
+        return ResponseEntity.ok().body(comments);
     }
 
     // USERNAME IN USE
