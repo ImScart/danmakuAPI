@@ -674,3 +674,47 @@ No input required
     "message": "Map not found with ID: null"
 }
 ```
+
+## Create A Score
+
+**Endpoint:** `{baseURL}/score/create`  
+**Method:** POST  
+**Description:** Stores a score in the database.
+### Expected Input
+
+```json
+{
+  "ownerId": "22",
+  "mapId": "2",
+  "value": "Voici mon premier commentaire"
+}
+```
+### Possible Outputs
+```json
+{
+    "code": "0",
+    "data": null,
+    "message": "Score created successfully"
+}
+```
+```json
+{
+    "code": "1",
+    "data": null,
+    "message": "User not found with ID: 2222"
+}
+```
+```json
+{
+    "code": "1",
+    "data": null,
+    "message": "Map not found with ID: 22"
+}
+```
+```json
+{
+    "code": "3",
+    "data": null,
+    "message": "One of the values to create score is invalid."
+}
+```

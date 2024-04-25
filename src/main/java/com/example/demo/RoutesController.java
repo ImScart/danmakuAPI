@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.DTO.CreateMapCommentDto;
 import com.example.demo.DTO.CreateMapDto;
+import com.example.demo.DTO.CreateScoreDto;
 import com.example.demo.DTO.ForumThreadCommentDto;
 import com.example.demo.DTO.ForumThreadCommentsDto;
 import com.example.demo.DTO.ForumThreadCreateDto;
@@ -43,6 +44,7 @@ import com.example.demo.Services.ForumThreadLikeService;
 import com.example.demo.Services.ForumThreadService;
 import com.example.demo.Services.MapCommentService;
 import com.example.demo.Services.MapService;
+import com.example.demo.Services.ScoreService;
 import com.example.demo.Services.SftpService;
 import com.example.demo.Services.UserService;
 import com.example.demo.Tables.Map;
@@ -58,9 +60,10 @@ public class RoutesController {
     private final SftpService sftpService;
     private final MapService mapService;
     private final MapCommentService mapCommentService;
+    private final ScoreService scoreService;
 
     public RoutesController(UserService userService, ForumThreadService threadService,
-            ForumThreadLikeService forumThreadLikeService, ForumThreadCommentService threadCommentService,SftpService sftpService, MapService mapService, MapCommentService mapCommentService) {
+            ForumThreadLikeService forumThreadLikeService, ForumThreadCommentService threadCommentService,SftpService sftpService, MapService mapService, MapCommentService mapCommentService, ScoreService scoreService) {
         this.userService = userService;
         this.threadService = threadService;
         this.threadLikeService = forumThreadLikeService;
@@ -68,6 +71,7 @@ public class RoutesController {
         this.sftpService=sftpService;
         this.mapService=mapService;
         this.mapCommentService=mapCommentService;
+        this.scoreService=scoreService;
     }
 
     @PostMapping("/register")
@@ -103,7 +107,6 @@ public class RoutesController {
         user.setEmailIsVerified(true);
         userService.saveUser(user);
         return ResponseEntity.ok("Email verified successfully");
-
     }
 
     @PostMapping("/thread/create")
@@ -209,6 +212,13 @@ public class RoutesController {
     public ResponseEntity<List<CreateMapCommentDto>> getAllMapComments(@RequestBody MapCommentsDto dto) {
         List<CreateMapCommentDto> comments = mapCommentService.getCommentsByMapId(dto);
         return ResponseEntity.ok().body(comments);
+    }
+
+    @PostMapping("/score/create")
+    public ResponseEntity<ApiResponse<String>> createScore(@RequestBody CreateScoreDto dto) {
+        scoreService.createScore(dto);
+        ApiResponse<String> response = new ApiResponse<>("0", "Score created successfully");
+        return ResponseEntity.ok(response);
     }
 
     // USERNAME IN USE
