@@ -10,8 +10,9 @@ public class Map {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "ownerID", nullable = false)
-    private Long ownerID;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ownerID", nullable = false)
+    private UserAccount owner;
 
     @Column(name = "name", nullable = false, length = 255)
     private String name;
@@ -34,12 +35,12 @@ public class Map {
         this.id = id;
     }
 
-    public Long getOwnerID() {
-        return ownerID;
+    public UserAccount getOwner() {
+        return owner;
     }
 
-    public void setOwnerID(Long ownerID) {
-        this.ownerID = ownerID;
+    public void setOwner(UserAccount owner) {
+        this.owner = owner;
     }
 
     public String getName() {

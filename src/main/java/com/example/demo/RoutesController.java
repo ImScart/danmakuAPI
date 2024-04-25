@@ -19,6 +19,7 @@ import com.example.demo.DTO.ForumThreadCreateDto;
 import com.example.demo.DTO.ForumThreadDto;
 import com.example.demo.DTO.ForumThreadLikeDto;
 import com.example.demo.DTO.ForumThreadLikesDto;
+import com.example.demo.DTO.MapsDto;
 import com.example.demo.DTO.ResetPasswordDto;
 import com.example.demo.DTO.ResetPasswordEmailDto;
 import com.example.demo.DTO.UserBioDto;
@@ -184,6 +185,12 @@ public class RoutesController {
             ApiResponse<String> response = new ApiResponse<>("2", "An issue has occured");
             return ResponseEntity.ok(response);
         }
+    }
+
+    @GetMapping("/maps/all")
+    public ResponseEntity<List<MapsDto>> getAllMaps() {
+        List<MapsDto>maps = mapService.getAllMaps();
+        return ResponseEntity.ok().body(maps);
     }
 
     // USERNAME IN USE

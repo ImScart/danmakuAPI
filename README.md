@@ -562,3 +562,29 @@ This endpoint expects a multipart/form-data request with the following parts:
     "message": "One of the values to upload a map is invalid."
 }
 ```
+
+## Get All Maps
+
+**Endpoint:** `{baseURL}/maps/all`  
+**Method:** GET  
+**Description:** Gets all maps uploaded to the database
+### Expected Input
+
+```text
+{
+No input required
+```
+### Possible Outputs
+```json
+[
+    {
+        "id": 2,
+        "ownerName": "scart",
+        "ownerProfilePicture": "http://144.217.83.146/profilePictures/22.png",
+        "name": "Ceci est un test",
+        "difficulty": "lunatic",
+        "downloadUrl": "http://144.217.83.146/maps/2.club",
+        "isAdminVerified": false
+    }
+]
+```

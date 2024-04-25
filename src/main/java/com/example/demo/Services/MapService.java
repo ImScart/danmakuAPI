@@ -1,7 +1,11 @@
 package com.example.demo.Services;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.demo.DTO.CreateMapDto;
+import com.example.demo.DTO.MapsDto;
 import com.example.demo.Exceptions.InvalidIdException;
 import com.example.demo.Exceptions.ValuesInvalidException;
 import com.example.demo.Repositories.MapRepository;
@@ -31,7 +35,7 @@ public class MapService {
                 .orElseThrow(() -> new InvalidIdException("User not found with ID: " + dto.getOwnerID()));
 
         Map map = new Map();
-        map.setOwnerID(userAccount.getId());
+        map.setOwner(userAccount);
         map.setName(dto.getName());
         map.setDifficulty(Difficulty.valueOf(dto.getDifficulty()));
         map.setIsAdminVerified(false);
@@ -49,6 +53,25 @@ public class MapService {
 
         map.setDownloadUrl("http://144.217.83.146/maps/"+id+".club");
         mapRepository.save(map);
+    }
+
+    public List<MapsDto> getAllMaps() {
+        List<Map> maps = mapRepository.findAll();
+        List<MapsDto> mapDTOs = new ArrayList<>();
+        for (Map map : maps) {
+            MapsDto threadDto = new MapsDto(
+                map.getId(),
+                map.getOwner().getUsername(),
+                map.getOwner().getProfilePicture(),
+                map.getName(),
+                map.getDifficulty().toString(),
+                map.getDownloadUrl(),
+                map.getIsAdminVerified()
+                );
+                
+            mapDTOs.add(threadDto);
+        }
+        return mapDTOs;
     }
 
     public Map saveMap(Map map) {
